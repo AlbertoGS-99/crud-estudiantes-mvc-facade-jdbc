@@ -40,7 +40,7 @@ public class MainController extends HttpServlet {
 		
 		try {
 			connectionResult = empleadoService.isConnectionOk();
-		} catch (SQLException e) {
+		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
