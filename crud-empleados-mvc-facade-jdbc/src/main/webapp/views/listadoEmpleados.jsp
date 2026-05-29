@@ -16,6 +16,12 @@
 	%>
 	<h1>Listado de Empleados</h1>
 	
+	<div>
+		<a href="AltaController" title="Muestra el formulario de alta/modificación de empleado">
+			Alta de Empleado
+		</a>
+	</div>
+	
 	<table>
 		<thead>
 			<tr>

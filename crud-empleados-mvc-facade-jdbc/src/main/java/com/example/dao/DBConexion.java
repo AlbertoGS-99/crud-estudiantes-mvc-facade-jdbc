@@ -68,6 +68,26 @@ public class DBConexion implements AutoCloseable {
 			
 		return rs;
 	}
+	
+	// Metodo que recupera todos los registros de la tabla departamentos
+	public ResultSet getDptos(Connection connection) {
+		
+		ResultSet rs = null;
+		String query = "SELECT * FROM `empresa-crud-empleados-mostoles-backend`.departamentos";
+		Statement stmt = null;
+		
+		try {
+			stmt = connection.createStatement();
+			rs = stmt.executeQuery(query);
+		} catch (SQLException e) {
+			LOG.severe("Error recuperando departamentos y la causa mas probable es: "
+								+ e.getMessage());
+			e.printStackTrace();
+		}
+		
+		return rs;
+	}
+	
 }
 
 
