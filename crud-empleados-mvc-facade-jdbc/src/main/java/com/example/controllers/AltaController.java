@@ -7,6 +7,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
@@ -17,6 +18,8 @@ import com.example.models.Empleado;
 import com.example.models.Genero;
 import com.example.services.DepartamentoService;
 import com.example.services.DepartamentoServiceImpl;
+import com.example.services.EmpleadoService;
+import com.example.services.EmpleadoServiceImpl;
 
 /**
  * Servlet implementation class AltaController
@@ -61,7 +64,8 @@ public class AltaController extends HttpServlet {
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	protected void doPost(HttpServletRequest request,
+			HttpServletResponse response) throws ServletException, IOException {
 		
 		// Aqui se reciben los datos procedentes de los controles del formulario
 		// Tener en cuenta que toda la informacion llega en formato String
@@ -126,6 +130,24 @@ public class AltaController extends HttpServlet {
 				.departamentos_id(departamentos_id)
 				.build();
 		
+		// Aqui se deberia llamar al servicio para que se encargue de 
+		// insertar el nuevo empleado
+		
+		EmpleadoService empleadoService = new EmpleadoServiceImpl();
+		
+		try {
+			empleadoService.altaEmpleado(empleado, direccionesCorreos,
+					numerosDeTelefono);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		List<Empleado> empleados = empleadoService.getEmpleados();
+		
+		request.setAttribute("empleados", empleados);
+		
+		request.getRequestDispatcher("views/listadoEmpleados.jsp").forward(request, response);
 		
 	}
 
