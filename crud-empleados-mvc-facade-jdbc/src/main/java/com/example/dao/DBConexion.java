@@ -242,6 +242,36 @@ public class DBConexion implements AutoCloseable {
 				connection.setAutoCommit(true);
 		}
 	}
+	
+	/* Metodo que recupera los detalles (Nombre del Dpto, los telefonos  
+	 * y los correos) de un empleado cuyo id se recibe como parametro */
+	public ResultSet detallesEmpleado(int idEmpleado, Connection connection) {
+		
+		ResultSet rs = null;
+		String query = "select dep.nombre nombreDpto, tel.numero numeroTelefono, "
+				+ "cor.email email\n"
+				+ "from empleados emp left join departamentos dep on\n"
+				+ "	emp.departamentos_id = dep.id left join telefonos tel on\n"
+				+ "		emp.id = tel.empleados_id left join correos cor on \n"
+				+ "			emp.id = cor.empleados_id\n"
+				+ "where emp.id = ?";
+		
+		PreparedStatement stmt1 = null;
+		
+		try {
+			stmt1 = connection.prepareStatement(query, 
+					ResultSet.TYPE_SCROLL_INSENSITIVE, 
+					ResultSet.CONCUR_UPDATABLE);
+			
+			stmt1.setInt(1, idEmpleado);
+			rs = stmt1.executeQuery();
+		} catch (SQLException e) {
+			LOG.severe("Error recuperando detalles del empleado");
+			e.printStackTrace();
+		}
+		
+		return rs;
+	}
 }
 
 

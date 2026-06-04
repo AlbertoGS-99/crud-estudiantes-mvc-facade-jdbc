@@ -46,6 +46,7 @@
 						<td><%=empleado.fechaAlta() %></td>
 						<td><%=empleado.genero() %></td>
 						<td><%=empleado.salario().setScale(2, RoundingMode.HALF_UP) %></td>
+						<td><a href="DetallesController?idEmpleado=<%=empleado.id() %>">Detalles</a></td>
 					</tr>
 					<%
 				}
