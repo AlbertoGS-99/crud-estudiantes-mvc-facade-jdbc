@@ -69,6 +69,7 @@ public class AltaController extends HttpServlet {
 		
 		// Aqui se reciben los datos procedentes de los controles del formulario
 		// Tener en cuenta que toda la informacion llega en formato String
+		int idEmpleado = Integer.parseInt(request.getParameter("idEmpleado"));
 		
 		String nombre = request.getParameter("nombre");
 		String primerApellido = request.getParameter("primerApellido");
@@ -121,6 +122,7 @@ public class AltaController extends HttpServlet {
 		// Crear el ojeto empleado
 		
 		Empleado empleado = Empleado.builder()
+				.id(idEmpleado)
 				.nombre(nombre)
 				.primerApellido(primerApellido)
 				.segundoApellido(segundoApellido)
@@ -135,13 +137,30 @@ public class AltaController extends HttpServlet {
 		
 		EmpleadoService empleadoService = new EmpleadoServiceImpl();
 		
-		try {
-			empleadoService.altaEmpleado(empleado, direccionesCorreos,
+		// En dependencia del id del Empleado, sera un alta  (idEmpleado = 0)
+		// o una modificacion si el id es desigual a cero
+		
+		if (idEmpleado == 0 ) {
+			// Alta nueva
+
+			try {
+				empleadoService.altaEmpleado(empleado,
+						direccionesCorreos, 
+						numerosDeTelefono);
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+		} else {
+			// Modificacion de un empleado existente
+			
+			empleadoService.updateEmpleado(empleado, 
+					direccionesCorreos, 
 					numerosDeTelefono);
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			
 		}
+
 		
 		List<Empleado> empleados = empleadoService.getEmpleados();
 		
