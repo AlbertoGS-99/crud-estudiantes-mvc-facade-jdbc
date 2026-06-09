@@ -1,0 +1,124 @@
+Index: crud-empleados-mvc-facade-jdbc/src/main/java/com/example/services/EmpleadoService.java
+===================================================================
+diff --git a/crud-empleados-mvc-facade-jdbc/src/main/java/com/example/services/EmpleadoService.java b/crud-empleados-mvc-facade-jdbc/src/main/java/com/example/services/EstudianteService.java
+rename from crud-empleados-mvc-facade-jdbc/src/main/java/com/example/services/EmpleadoService.java
+rename to crud-empleados-mvc-facade-jdbc/src/main/java/com/example/services/EstudianteService.java
+--- a/crud-empleados-mvc-facade-jdbc/src/main/java/com/example/services/EmpleadoService.java	(revision ed4c5176316541781d693d676f1e343dd8e0ea7c)
++++ b/crud-empleados-mvc-facade-jdbc/src/main/java/com/example/services/EstudianteService.java	(date 1780993107360)
+@@ -1,12 +1,9 @@
+ package com.example.services;
+ 
+-import java.sql.SQLException;
+ import java.util.List;
+-
+-import com.example.models.Empleado;
++import com.example.models.Estudiante;
+ 
+-public interface EmpleadoService {
+-	boolean isConnectionOk() throws SQLException, Exception ;
+-	List<Empleado> getEmpleados();
+-	
+-}
++public interface EstudianteService {
++	boolean isConnectionOk() throws Exception;
++	List<Estudiante> getEstudiantes();
++}
+\ No newline at end of file
+Index: crud-empleados-mvc-facade-jdbc/src/main/webapp/views/listadoEmpleados.jsp
+===================================================================
+diff --git a/crud-empleados-mvc-facade-jdbc/src/main/webapp/views/listadoEmpleados.jsp b/crud-empleados-mvc-facade-jdbc/src/main/webapp/views/listadoEstudiantes.jsp
+rename from crud-empleados-mvc-facade-jdbc/src/main/webapp/views/listadoEmpleados.jsp
+rename to crud-empleados-mvc-facade-jdbc/src/main/webapp/views/listadoEstudiantes.jsp
+--- a/crud-empleados-mvc-facade-jdbc/src/main/webapp/views/listadoEmpleados.jsp	(revision ed4c5176316541781d693d676f1e343dd8e0ea7c)
++++ b/crud-empleados-mvc-facade-jdbc/src/main/webapp/views/listadoEstudiantes.jsp	(date 1780993203156)
+@@ -1,4 +1,4 @@
+-<%@page import="com.example.models.Empleado"%>
++<%@page import="com.example.models.Estudiante"%>
+ <%@page import="java.util.List"%>
+ <%@ page language="java" contentType="text/html; charset=UTF-8"
+     pageEncoding="UTF-8"%>
+@@ -6,43 +6,47 @@
+ <html>
+ <head>
+ <meta charset="UTF-8">
+-<title>empleados</title>
++<title>Estudiantes</title>
+ </head>
+ <body>
+-	<%
+-	
+-		List<Empleado> empleados = (List<Empleado>) request.getAttribute("empleados");
+-	
+-	%>
+-	<h1>Listado de Empleados</h1>
+-	
+-	<table>
+-		<thead>
+-			<tr>
+-				<th>Nombre</th>
+-				<th>Primer Apellido</th>
+-				<th>Segundo Apellido</th>
+-				<th>Fecha de Alta</th>
+-				<th>Genero</th>
+-				<th>Salario</th>
+-			</tr>
+-		</thead>
+-		<tbody>
+-			<%
+-				for (Empleado empleado : empleados) {
+-					%>
+-					<tr>
+-						<td><%=empleado.nombre() %></td>
+-						<td><%=empleado.primerApellido() %></td>
+-						<td><%=empleado.segundoApellido() %></td>
+-						<td><%=empleado.fechaAlta() %></td>
+-						<td><%=empleado.genero() %></td>
+-						<td><%=empleado.salario() %></td>
+-					</tr>
+-					<%
+-				}
+-			%>	
+-		</tbody>
+-	</table>
++    <%
++        List<Estudiante> estudiantes = (List<Estudiante>) request.getAttribute("estudiantes");
++    %>
++    <h1>Listado de Estudiantes</h1>
++
++    <table>
++        <thead>
++            <tr>
++                <th>Nombre</th>
++                <th>Apellidos</th>
++                <th>Email</th>
++                <th>Teléfono</th>
++                <th>Fecha de Nacimiento</th>
++                <th>ID Carrera</th>
++                <th>Activo</th>
++                <th>Fecha de Registro</th>
++                <th>Fecha de Actualización</th>
++            </tr>
++        </thead>
++        <tbody>
++            <%
++                for (Estudiante estudiante : estudiantes) {
++            %>
++                <tr>
++                    <td><%= estudiante.nombre() %></td>
++                    <td><%= estudiante.apellidos() %></td>
++                    <td><%= estudiante.email() %></td>
++                    <td><%= estudiante.telefono() %></td>
++                    <td><%= estudiante.fechaNacimiento() %></td>
++                    <td><%= estudiante.id_carrera() %></td>
++                    <td><%= estudiante.activo() %></td>
++                    <td><%= estudiante.fechaRegistro() %></td>
++                    <td><%= estudiante.fechaActualizacion() %></td>
++                </tr>
++            <%
++                }
++            %>
++        </tbody>
++    </table>
+ </body>
+ </html>
+\ No newline at end of file

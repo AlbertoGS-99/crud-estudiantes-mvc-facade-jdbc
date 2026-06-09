@@ -1,49 +1,46 @@
 <%@page import="com.example.models.Detalle"%>
-<%@page import="com.example.models.Empleado"%>
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+<%@page import="com.example.models.Estudiante"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>Detalles del Estudiante</title>
 </head>
 <body>
-	<%
-		Empleado empleado = (Empleado) request.getAttribute("empleado");
-		Detalle detalles = (Detalle) request.getAttribute("detalles");
-	%>
-	
-	<h1>Detalles del empleado: <%=empleado.nombre() + " " + empleado.primerApellido()  %> </h1>
-	
-	<h3>Departamento: <%=detalles.nombreDpto() %></h3>
-	
-	<div>
-		<h3>Telefonos: </h3>
-		
-		<ul>
-			<%
-				for (String numero : detalles.telefonos()) {
-					%>
-					<li><%=numero %></li>
-					<%
-				}
-			%>
-		</ul>
-	</div>
-	
-	<div>
-		<h3>Correos: </h3>
-		
-		<ul>
-			<%
-				for (String email : detalles.correos()) {
-					%>
-					<li><%=email %></li>
-					<%
-				}
-			%>
-		</ul>
-	</div>
+    <%
+        Estudiante estudiante = (Estudiante) request.getAttribute("estudiante");
+        Detalle detalles = (Detalle) request.getAttribute("detalles");
+    %>
+
+    <h1>Detalles del estudiante: <%= estudiante.nombre() + " " + estudiante.apellidos() %></h1>
+
+    <h3>Carrera: <%= detalles.nombreCarrera() %></h3>
+
+    <div>
+        <h3>Asignaturas matriculadas:</h3>
+        <ul>
+            <%
+                for (String asignatura : detalles.asignaturas()) {
+            %>
+                <li><%= asignatura %></li>
+            <%
+                }
+            %>
+        </ul>
+    </div>
+
+    <div>
+        <h3>Años académicos:</h3>
+        <ul>
+            <%
+                for (String anio : detalles.matriculas()) {
+            %>
+                <li><%= anio %></li>
+            <%
+                }
+            %>
+        </ul>
+    </div>
 </body>
 </html>

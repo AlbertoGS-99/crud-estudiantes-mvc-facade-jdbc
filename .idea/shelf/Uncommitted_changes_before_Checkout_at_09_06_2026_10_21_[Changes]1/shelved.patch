@@ -1,0 +1,321 @@
+Index: crud-empleados-mvc-facade-jdbc/src/main/webapp/index.jsp
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><%@ page language=\"java\" contentType=\"text/html; charset=UTF-8\"\r\n    pageEncoding=\"UTF-8\"%>\r\n<!DOCTYPE html>\r\n<html>\r\n<head>\r\n<meta charset=\"UTF-8\">\r\n<title>Insert title here</title>\r\n</head>\r\n<body>\r\n\t<h1>Bienvenido al sistema de gestión de empleados</h1>\r\n\t\r\n\t<div>\r\n\t    <a href=\"MainController\">Mostrar listado de empleados</a>\r\n\t</div>\r\n</body>\r\n</html>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/crud-empleados-mvc-facade-jdbc/src/main/webapp/index.jsp b/crud-empleados-mvc-facade-jdbc/src/main/webapp/index.jsp
+--- a/crud-empleados-mvc-facade-jdbc/src/main/webapp/index.jsp	(revision ed4c5176316541781d693d676f1e343dd8e0ea7c)
++++ b/crud-empleados-mvc-facade-jdbc/src/main/webapp/index.jsp	(date 1780993215355)
+@@ -4,13 +4,13 @@
+ <html>
+ <head>
+ <meta charset="UTF-8">
+-<title>Insert title here</title>
++<title>Universidad</title>
+ </head>
+ <body>
+-	<h1>Bienvenido al sistema de gestión de empleados</h1>
+-	
+-	<div>
+-	    <a href="MainController">Mostrar listado de empleados</a>
+-	</div>
++    <h1>Bienvenido al sistema de gestión de estudiantes</h1>
++
++    <div>
++        <a href="MainController">Mostrar listado de estudiantes</a>
++    </div>
+ </body>
+ </html>
+\ No newline at end of file
+Index: crud-empleados-mvc-facade-jdbc/src/main/java/com/example/models/Empleado.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/crud-empleados-mvc-facade-jdbc/src/main/java/com/example/models/Empleado.java b/crud-empleados-mvc-facade-jdbc/src/main/java/com/example/models/Estudiante.java
+rename from crud-empleados-mvc-facade-jdbc/src/main/java/com/example/models/Empleado.java
+rename to crud-empleados-mvc-facade-jdbc/src/main/java/com/example/models/Estudiante.java
+--- a/crud-empleados-mvc-facade-jdbc/src/main/java/com/example/models/Empleado.java	(revision ed4c5176316541781d693d676f1e343dd8e0ea7c)
++++ b/crud-empleados-mvc-facade-jdbc/src/main/java/com/example/models/Estudiante.java	(date 1780993087477)
+@@ -6,14 +6,15 @@
+ import lombok.Builder;
+ 
+ @Builder
+-public record Empleado(
+-		int id, 
+-		String nombre, 
+-		String primerApellido,
+-		String segundoApellido,
+-		LocalDate fechaAlta,
+-		Genero genero,
+-		BigDecimal salario,
+-		int departamentos_id) {
+-
+-}
++public record Estudiante(
++		int id,
++		String nombre,
++		String apellidos,
++		String email,
++		String telefono,
++		LocalDate fechaNacimiento,
++		int id_carrera,
++		boolean activo,
++		LocalDate fechaRegistro,
++		LocalDate fechaActualizacion) {
++}
+\ No newline at end of file
+Index: crud-empleados-mvc-facade-jdbc/src/main/java/com/example/services/EmpleadoServiceImpl.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/crud-empleados-mvc-facade-jdbc/src/main/java/com/example/services/EmpleadoServiceImpl.java b/crud-empleados-mvc-facade-jdbc/src/main/java/com/example/services/EstudianteServiceImpl.java
+rename from crud-empleados-mvc-facade-jdbc/src/main/java/com/example/services/EmpleadoServiceImpl.java
+rename to crud-empleados-mvc-facade-jdbc/src/main/java/com/example/services/EstudianteServiceImpl.java
+--- a/crud-empleados-mvc-facade-jdbc/src/main/java/com/example/services/EmpleadoServiceImpl.java	(revision ed4c5176316541781d693d676f1e343dd8e0ea7c)
++++ b/crud-empleados-mvc-facade-jdbc/src/main/java/com/example/services/EstudianteServiceImpl.java	(date 1780993131946)
+@@ -1,83 +1,65 @@
+ package com.example.services;
+ 
+-import java.math.BigDecimal;
+ import java.sql.Connection;
+ import java.sql.ResultSet;
+ import java.util.ArrayList;
+ import java.util.List;
+ 
+ import com.example.dao.DBConexion;
+-import com.example.models.Empleado;
+-import com.example.models.Genero;
++import com.example.models.Estudiante;
+ 
+-public class EmpleadoServiceImpl implements EmpleadoService {
++public class EstudianteServiceImpl implements EstudianteService {
+ 
+ 	@Override
+ 	public boolean isConnectionOk() throws Exception {
+-		
+-		
+-		
++
+ 		boolean connectionOk = false;
+-		
+-		
++
+ 		try (DBConexion dbConexion = new DBConexion("root", "Temp2025");
+-			  Connection connection = dbConexion.getConexion())  {
+-			
+-			if (connection != null) 
++		     Connection connection = dbConexion.getConexion()) {
++
++			if (connection != null)
+ 				connectionOk = true;
++
+ 		} catch (ClassNotFoundException e) {
+-			// TODO Auto-generated catch block
+ 			e.printStackTrace();
+-		} 
+-		
++		}
++
+ 		return connectionOk;
+ 	}
+ 
+ 	@Override
+-	public List<Empleado> getEmpleados() {
+-		
+-		List<Empleado> empleados = new ArrayList<Empleado>();
+-		
++	public List<Estudiante> getEstudiantes() {
++
++		List<Estudiante> estudiantes = new ArrayList<>();
++
+ 		try (DBConexion dbConexion = new DBConexion("root", "Temp2025");
+-				Connection connection = dbConexion.getConexion()) {
+-			
+-			ResultSet rs = dbConexion.getEmpleados(connection);
+-		
++		     Connection connection = dbConexion.getConexion()) {
++
++			ResultSet rs = dbConexion.getEstudiantes(connection);
++
+ 			while (rs.next()) {
+-				
+-				empleados.add(
+-						Empleado.builder()
+-						.id(rs.getInt("id"))
+-						.nombre(rs.getString("nombre"))
+-						.primerApellido(rs.getString("primerApellido"))
+-						.segundoApellido(rs.getString("segundoApellido"))
+-						.fechaAlta(rs.getDate("fechaAlta").toLocalDate())
+-						.genero(Genero.valueOf(rs.getString("genero")))
+-						.salario(new BigDecimal(rs.getDouble("salario")))
+-						.departamentos_id(rs.getInt("departamentos_id"))
+-						.build()
+-						);
++
++				estudiantes.add(
++						Estudiante.builder()
++								.id(rs.getInt("id"))
++								.nombre(rs.getString("nombre"))
++								.apellidos(rs.getString("apellidos"))
++								.email(rs.getString("email"))
++								.telefono(rs.getString("telefono"))
++								.fechaNacimiento(rs.getDate("fecha_nacimiento").toLocalDate())
++								.id_carrera(rs.getInt("id_carrera"))
++								.activo(rs.getBoolean("activo"))
++								.fechaRegistro(rs.getDate("fecha_registro").toLocalDate())
++								.fechaActualizacion(rs.getDate("fecha_actualizacion").toLocalDate())
++								.build()
++				);
+ 			}
+-			
++
+ 		} catch (Exception e) {
+-			// TODO: handle exception
++			e.printStackTrace();
+ 		}
+-		
+-		
+-		
+-		return empleados;
+-	}
+ 
+-}
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
++		return estudiantes;
++	}
++}
+\ No newline at end of file
+Index: crud-empleados-mvc-facade-jdbc/src/main/java/com/example/controllers/MainController.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.controllers;\r\n\r\nimport jakarta.servlet.ServletException;\r\nimport jakarta.servlet.annotation.WebServlet;\r\nimport jakarta.servlet.http.HttpServlet;\r\nimport jakarta.servlet.http.HttpServletRequest;\r\nimport jakarta.servlet.http.HttpServletResponse;\r\nimport java.io.IOException;\r\nimport java.sql.SQLException;\r\nimport java.util.List;\r\nimport java.util.logging.Logger;\r\n\r\nimport com.example.models.Empleado;\r\nimport com.example.services.EmpleadoService;\r\nimport com.example.services.EmpleadoServiceImpl;\r\n\r\n/**\r\n * Servlet implementation class MainController\r\n */\r\n@WebServlet(\"/MainController\")\r\npublic class MainController extends HttpServlet {\r\n\tprivate static final long serialVersionUID = 1L;\r\n\t\r\n\tprivate static final Logger LOG = Logger.getLogger(\"MainController\");\r\n       \r\n    /**\r\n     * @see HttpServlet#HttpServlet()\r\n     */\r\n    public MainController() {\r\n        super();\r\n        // TODO Auto-generated constructor stub\r\n    }\r\n\r\n\t/**\r\n\t * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)\r\n\t */\r\n\tprotected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {\r\n\t\t\r\n\t\t// Conectar con la capa de servicios\r\n\t\t\r\n\t\tEmpleadoService empleadoService = new EmpleadoServiceImpl();\r\n\t\t\r\n\t\tList<Empleado> empleados = empleadoService.getEmpleados();\r\n\t\t\r\n\t\t// El listado de empleados hay que enviarlo como atributo a la vista \r\n\t\t// para que sea renderizada\r\n\t\trequest.setAttribute(\"empleados\", empleados);\r\n\t\t\r\n\t\trequest.getRequestDispatcher(\"views/listadoEmpleados.jsp\").forward(request, response);\r\n\t\t\r\n\t}\r\n\r\n\t/**\r\n\t * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)\r\n\t */\r\n\tprotected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {\r\n\t}\r\n\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/crud-empleados-mvc-facade-jdbc/src/main/java/com/example/controllers/MainController.java b/crud-empleados-mvc-facade-jdbc/src/main/java/com/example/controllers/MainController.java
+--- a/crud-empleados-mvc-facade-jdbc/src/main/java/com/example/controllers/MainController.java	(revision ed4c5176316541781d693d676f1e343dd8e0ea7c)
++++ b/crud-empleados-mvc-facade-jdbc/src/main/java/com/example/controllers/MainController.java	(date 1780993173478)
+@@ -6,54 +6,36 @@
+ import jakarta.servlet.http.HttpServletRequest;
+ import jakarta.servlet.http.HttpServletResponse;
+ import java.io.IOException;
+-import java.sql.SQLException;
+ import java.util.List;
+ import java.util.logging.Logger;
+ 
+-import com.example.models.Empleado;
+-import com.example.services.EmpleadoService;
+-import com.example.services.EmpleadoServiceImpl;
++import com.example.models.Estudiante;
++import com.example.services.EstudianteService;
++import com.example.services.EstudianteServiceImpl;
+ 
+-/**
+- * Servlet implementation class MainController
+- */
+ @WebServlet("/MainController")
+ public class MainController extends HttpServlet {
+ 	private static final long serialVersionUID = 1L;
+-	
++
+ 	private static final Logger LOG = Logger.getLogger("MainController");
+-       
+-    /**
+-     * @see HttpServlet#HttpServlet()
+-     */
+-    public MainController() {
+-        super();
+-        // TODO Auto-generated constructor stub
+-    }
++
++	public MainController() {
++		super();
++	}
+ 
+-	/**
+-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
+-	 */
+-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+-		
+-		// Conectar con la capa de servicios
+-		
+-		EmpleadoService empleadoService = new EmpleadoServiceImpl();
+-		
+-		List<Empleado> empleados = empleadoService.getEmpleados();
+-		
+-		// El listado de empleados hay que enviarlo como atributo a la vista 
+-		// para que sea renderizada
+-		request.setAttribute("empleados", empleados);
+-		
+-		request.getRequestDispatcher("views/listadoEmpleados.jsp").forward(request, response);
+-		
+-	}
++	protected void doGet(HttpServletRequest request, HttpServletResponse response)
++			throws ServletException, IOException {
++
++		EstudianteService estudianteService = new EstudianteServiceImpl();
++
++		List<Estudiante> estudiantes = estudianteService.getEstudiantes();
++
++		request.setAttribute("estudiantes", estudiantes);
+ 
+-	/**
+-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+-	 */
+-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
++		request.getRequestDispatcher("views/listadoEstudiantes.jsp").forward(request, response);
+ 	}
+ 
+-}
++	protected void doPost(HttpServletRequest request, HttpServletResponse response)
++			throws ServletException, IOException {
++	}
++}
+\ No newline at end of file
+Index: crud-empleados-mvc-facade-jdbc/src/main/java/com/example/dao/DBConexion.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.dao;\r\n\r\nimport java.sql.Connection;\r\nimport java.sql.DriverManager;\r\nimport java.sql.ResultSet;\r\nimport java.sql.SQLException;\r\nimport java.sql.Statement;\r\nimport java.util.Properties;\r\nimport java.util.logging.Logger;\r\n\r\npublic class DBConexion implements AutoCloseable {\r\n\t\r\n\tprivate static final Logger LOG = Logger.getLogger(\"DBConexion\");\r\n\t\r\n\tprivate String user;\r\n\tprivate String password;\r\n\tprivate Connection connection;\r\n\t\r\n\tpublic DBConexion(String user, String password) {\r\n\t\tsuper();\r\n\t\tthis.user = user;\r\n\t\tthis.password = password;\r\n\t}\r\n\t\r\n\t// Metodo que estable la conexion con la base de datos\r\n\tpublic Connection getConexion() throws ClassNotFoundException {\r\n\t\t\r\n\t\tString urlConnection = \"jdbc:mysql://localhost:3306/empresa-crud-empleados-mostoles-backend\";\r\n\t\t\r\n\t\tProperties info = new Properties();\r\n\t\t\r\n\t\tinfo.put(\"user\", this.user);\r\n\t\tinfo.put(\"password\", this.password);\r\n\t\t\r\n\t\t\r\n\t\ttry {\r\n\t\t\tClass.forName(\"com.mysql.cj.jdbc.Driver\");\r\n\t\t\tthis.connection = DriverManager.getConnection(urlConnection, info);\r\n\t\t\tLOG.info(\"Conexion establecida con la base de datos, exitosamente !!!!\");\r\n\t\t} catch (SQLException e) {\r\n\t\t\t// TODO Auto-generated catch block\r\n\t\t\te.printStackTrace();\r\n\t\t}\r\n\t\t\r\n\t\treturn this.connection;\r\n\t}\r\n\r\n\t@Override\r\n\tpublic void close() throws Exception {\r\n\t\tthis.connection.close();\r\n\t}\r\n\t\r\n\t// Metodo que recupera todos los registros de la tabla empleados\r\n\tpublic ResultSet getEmpleados(Connection connection) {\r\n\t\t\r\n\t\tResultSet rs = null;\r\n\t\tString query = \"SELECT * FROM `empresa-crud-empleados-mostoles-backend`.empleados\";\r\n\t\tStatement stmt = null;\r\n\t\t\r\n\t\ttry {\r\n\t\t\tstmt = connection.createStatement();\r\n\t\t\trs = stmt.executeQuery(query);\r\n\t\t} catch (SQLException e) {\r\n\t\t\t// TODO Auto-generated catch block\r\n\t\t\te.printStackTrace();\r\n\t\t}\r\n\t\t\r\n\t\t\t\r\n\t\treturn rs;\r\n\t}\r\n}\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/crud-empleados-mvc-facade-jdbc/src/main/java/com/example/dao/DBConexion.java b/crud-empleados-mvc-facade-jdbc/src/main/java/com/example/dao/DBConexion.java
+--- a/crud-empleados-mvc-facade-jdbc/src/main/java/com/example/dao/DBConexion.java	(revision ed4c5176316541781d693d676f1e343dd8e0ea7c)
++++ b/crud-empleados-mvc-facade-jdbc/src/main/java/com/example/dao/DBConexion.java	(date 1780993165434)
+@@ -66,6 +66,21 @@
+ 		}
+ 		
+ 			
++		return rs;
++	}
++	public ResultSet getEstudiantes(Connection connection) {
++
++		ResultSet rs = null;
++		String query = "SELECT * FROM Universidad.estudiantes";
++		Statement stmt = null;
++
++		try {
++			stmt = connection.createStatement();
++			rs = stmt.executeQuery(query);
++		} catch (SQLException e) {
++			e.printStackTrace();
++		}
++
+ 		return rs;
+ 	}
+ }

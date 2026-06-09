@@ -1,0 +1,139 @@
+Index: crud-empleados-mvc-facade-jdbc/src/main/java/com/example/services/EmpleadoServiceImpl.java
+===================================================================
+diff --git a/crud-empleados-mvc-facade-jdbc/src/main/java/com/example/services/EmpleadoServiceImpl.java b/crud-empleados-mvc-facade-jdbc/src/main/java/com/example/services/EstudianteServiceImpl.java
+rename from crud-empleados-mvc-facade-jdbc/src/main/java/com/example/services/EmpleadoServiceImpl.java
+rename to crud-empleados-mvc-facade-jdbc/src/main/java/com/example/services/EstudianteServiceImpl.java
+--- a/crud-empleados-mvc-facade-jdbc/src/main/java/com/example/services/EmpleadoServiceImpl.java	(revision 4faf4e6460cac02131975a20b7648cb66f0aa9b1)
++++ b/crud-empleados-mvc-facade-jdbc/src/main/java/com/example/services/EstudianteServiceImpl.java	(date 1780993286073)
+@@ -1,6 +1,5 @@
+ package com.example.services;
+ 
+-import java.math.BigDecimal;
+ import java.sql.Connection;
+ import java.sql.ResultSet;
+ import java.sql.SQLException;
+@@ -12,68 +11,61 @@
+ 
+ import com.example.dao.DBConexion;
+ import com.example.models.Detalle;
+-import com.example.models.Empleado;
+-import com.example.models.Genero;
++import com.example.models.Estudiante;
+ 
+-public class EmpleadoServiceImpl implements EmpleadoService {
++public class EstudianteServiceImpl implements EstudianteService {
+ 	
+ 	private static final Logger LOG = Logger.getLogger("EmpleadoServiceImpl");
+ 
+ 	@Override
+ 	public boolean isConnectionOk() throws Exception {
+-		
+-		
+-		
++
+ 		boolean connectionOk = false;
+-		
+-		
++
+ 		try (DBConexion dbConexion = new DBConexion("root", "Temp2025");
+-			  Connection connection = dbConexion.getConexion())  {
+-			
+-			if (connection != null) 
++		     Connection connection = dbConexion.getConexion()) {
++
++			if (connection != null)
+ 				connectionOk = true;
++
+ 		} catch (ClassNotFoundException e) {
+-			// TODO Auto-generated catch block
+ 			e.printStackTrace();
+-		} 
+-		
++		}
++
+ 		return connectionOk;
+ 	}
+ 
+ 	@Override
+-	public List<Empleado> getEmpleados() {
+-		
+-		List<Empleado> empleados = new ArrayList<Empleado>();
+-		
++	public List<Estudiante> getEstudiantes() {
++
++		List<Estudiante> estudiantes = new ArrayList<>();
++
+ 		try (DBConexion dbConexion = new DBConexion("root", "Temp2025");
+-				Connection connection = dbConexion.getConexion()) {
+-			
+-			ResultSet rs = dbConexion.getEmpleados(connection);
+-		
++		     Connection connection = dbConexion.getConexion()) {
++
++			ResultSet rs = dbConexion.getEstudiantes(connection);
++
+ 			while (rs.next()) {
+-				
+-				empleados.add(
+-						Empleado.builder()
+-						.id(rs.getInt("id"))
+-						.nombre(rs.getString("nombre"))
+-						.primerApellido(rs.getString("primerApellido"))
+-						.segundoApellido(rs.getString("segundoApellido"))
+-						.fechaAlta(rs.getDate("fechaAlta").toLocalDate())
+-						.genero(Genero.valueOf(rs.getString("genero")))
+-						.salario(new BigDecimal(rs.getDouble("salario")))
+-						.departamentos_id(rs.getInt("departamentos_id"))
+-						.build()
+-						);
++
++				estudiantes.add(
++						Estudiante.builder()
++								.id(rs.getInt("id"))
++								.nombre(rs.getString("nombre"))
++								.apellidos(rs.getString("apellidos"))
++								.email(rs.getString("email"))
++								.telefono(rs.getString("telefono"))
++								.fechaNacimiento(rs.getDate("fecha_nacimiento").toLocalDate())
++								.id_carrera(rs.getInt("id_carrera"))
++								.activo(rs.getBoolean("activo"))
++								.fechaRegistro(rs.getDate("fecha_registro").toLocalDate())
++								.fechaActualizacion(rs.getDate("fecha_actualizacion").toLocalDate())
++								.build()
++				);
+ 			}
+-			
++
+ 		} catch (Exception e) {
+-			// TODO: handle exception
++			e.printStackTrace();
+ 		}
+-		
+-		
+-		
+-		return empleados;
+-	}
+ 
+ 	@Override
+ 	public void altaEmpleado(Empleado empleado, 
+@@ -137,16 +129,6 @@
+ 		return detalles;
+ 	}
+ 
+-}
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
++		return estudiantes;
++	}
++}
+\ No newline at end of file

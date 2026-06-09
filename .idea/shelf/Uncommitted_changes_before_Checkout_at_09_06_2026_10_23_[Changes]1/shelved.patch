@@ -1,0 +1,207 @@
+Index: crud-empleados-mvc-facade-jdbc/src/main/webapp/index.jsp
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><%@ page language=\"java\" contentType=\"text/html; charset=UTF-8\"\r\n    pageEncoding=\"UTF-8\"%>\r\n<!DOCTYPE html>\r\n<html>\r\n<head>\r\n<meta charset=\"UTF-8\">\r\n<title>Insert title here</title>\r\n</head>\r\n<body>\r\n\t<h1>Bienvenido al sistema de gestión de empleados</h1>\r\n\t\r\n\t<div>\r\n\t    <a href=\"MainController\">Mostrar listado de empleados</a>\r\n\t</div>\r\n</body>\r\n</html>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/crud-empleados-mvc-facade-jdbc/src/main/webapp/index.jsp b/crud-empleados-mvc-facade-jdbc/src/main/webapp/index.jsp
+--- a/crud-empleados-mvc-facade-jdbc/src/main/webapp/index.jsp	(revision 4faf4e6460cac02131975a20b7648cb66f0aa9b1)
++++ b/crud-empleados-mvc-facade-jdbc/src/main/webapp/index.jsp	(date 1780993286029)
+@@ -4,13 +4,13 @@
+ <html>
+ <head>
+ <meta charset="UTF-8">
+-<title>Insert title here</title>
++<title>Universidad</title>
+ </head>
+ <body>
+-	<h1>Bienvenido al sistema de gestión de empleados</h1>
+-	
+-	<div>
+-	    <a href="MainController">Mostrar listado de empleados</a>
+-	</div>
++    <h1>Bienvenido al sistema de gestión de estudiantes</h1>
++
++    <div>
++        <a href="MainController">Mostrar listado de estudiantes</a>
++    </div>
+ </body>
+ </html>
+\ No newline at end of file
+Index: crud-empleados-mvc-facade-jdbc/src/main/java/com/example/controllers/MainController.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.controllers;\r\n\r\nimport jakarta.servlet.ServletException;\r\nimport jakarta.servlet.annotation.WebServlet;\r\nimport jakarta.servlet.http.HttpServlet;\r\nimport jakarta.servlet.http.HttpServletRequest;\r\nimport jakarta.servlet.http.HttpServletResponse;\r\nimport java.io.IOException;\r\nimport java.sql.SQLException;\r\nimport java.util.List;\r\nimport java.util.logging.Logger;\r\n\r\nimport com.example.models.Empleado;\r\nimport com.example.services.EmpleadoService;\r\nimport com.example.services.EmpleadoServiceImpl;\r\n\r\n/**\r\n * Servlet implementation class MainController\r\n */\r\n@WebServlet(\"/MainController\")\r\npublic class MainController extends HttpServlet {\r\n\tprivate static final long serialVersionUID = 1L;\r\n\t\r\n\tprivate static final Logger LOG = Logger.getLogger(\"MainController\");\r\n       \r\n    /**\r\n     * @see HttpServlet#HttpServlet()\r\n     */\r\n    public MainController() {\r\n        super();\r\n        // TODO Auto-generated constructor stub\r\n    }\r\n\r\n\t/**\r\n\t * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)\r\n\t */\r\n\tprotected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {\r\n\t\t\r\n\t\t// Conectar con la capa de servicios\r\n\t\t\r\n\t\tEmpleadoService empleadoService = new EmpleadoServiceImpl();\r\n\t\t\r\n\t\tList<Empleado> empleados = empleadoService.getEmpleados();\r\n\t\t\r\n\t\t// El listado de empleados hay que enviarlo como atributo a la vista \r\n\t\t// para que sea renderizada\r\n\t\trequest.setAttribute(\"empleados\", empleados);\r\n\t\t\r\n\t\trequest.getRequestDispatcher(\"views/listadoEmpleados.jsp\").forward(request, response);\r\n\t\t\r\n\t}\r\n\r\n\t/**\r\n\t * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)\r\n\t */\r\n\tprotected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {\r\n\t}\r\n\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/crud-empleados-mvc-facade-jdbc/src/main/java/com/example/controllers/MainController.java b/crud-empleados-mvc-facade-jdbc/src/main/java/com/example/controllers/MainController.java
+--- a/crud-empleados-mvc-facade-jdbc/src/main/java/com/example/controllers/MainController.java	(revision 4faf4e6460cac02131975a20b7648cb66f0aa9b1)
++++ b/crud-empleados-mvc-facade-jdbc/src/main/java/com/example/controllers/MainController.java	(date 1780993324910)
+@@ -6,54 +6,36 @@
+ import jakarta.servlet.http.HttpServletRequest;
+ import jakarta.servlet.http.HttpServletResponse;
+ import java.io.IOException;
+-import java.sql.SQLException;
+ import java.util.List;
+ import java.util.logging.Logger;
+ 
+-import com.example.models.Empleado;
+-import com.example.services.EmpleadoService;
+-import com.example.services.EmpleadoServiceImpl;
++import com.example.models.Estudiante;
++import com.example.services.EstudianteService;
++import com.example.services.EstudianteServiceImpl;
+ 
+-/**
+- * Servlet implementation class MainController
+- */
+ @WebServlet("/MainController")
+ public class MainController extends HttpServlet {
+ 	private static final long serialVersionUID = 1L;
+-	
++
+ 	private static final Logger LOG = Logger.getLogger("MainController");
+-       
+-    /**
+-     * @see HttpServlet#HttpServlet()
+-     */
+-    public MainController() {
+-        super();
+-        // TODO Auto-generated constructor stub
+-    }
++
++	public MainController() {
++		super();
++	}
+ 
+-	/**
+-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
+-	 */
+-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+-		
+-		// Conectar con la capa de servicios
+-		
+-		EmpleadoService empleadoService = new EmpleadoServiceImpl();
+-		
+-		List<Empleado> empleados = empleadoService.getEmpleados();
+-		
+-		// El listado de empleados hay que enviarlo como atributo a la vista 
+-		// para que sea renderizada
+-		request.setAttribute("empleados", empleados);
+-		
+-		request.getRequestDispatcher("views/listadoEmpleados.jsp").forward(request, response);
+-		
+-	}
++	protected void doGet(HttpServletRequest request, HttpServletResponse response)
++			throws ServletException, IOException {
++
++		EstudianteService estudianteService = new EstudianteServiceImpl();
++
++		List<Estudiante> estudiantes = estudianteService.getEstudiantes();
++
++		request.setAttribute("estudiantes", estudiantes);
+ 
+-	/**
+-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+-	 */
+-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
++		request.getRequestDispatcher("views/listadoEstudiantes.jsp").forward(request, response);
+ 	}
+ 
+-}
++	protected void doPost(HttpServletRequest request, HttpServletResponse response)
++			throws ServletException, IOException {
++	}
++}
+\ No newline at end of file
+Index: crud-empleados-mvc-facade-jdbc/src/main/java/com/example/dao/DBConexion.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.dao;\r\n\r\nimport java.sql.Connection;\r\nimport java.sql.Date;\r\nimport java.sql.DriverManager;\r\nimport java.sql.PreparedStatement;\r\nimport java.sql.ResultSet;\r\nimport java.sql.SQLException;\r\nimport java.sql.Statement;\r\nimport java.util.List;\r\nimport java.util.Properties;\r\nimport java.util.logging.Logger;\r\n\r\nimport com.example.models.Empleado;\r\n\r\npublic class DBConexion implements AutoCloseable {\r\n\t\r\n\tprivate static final Logger LOG = Logger.getLogger(\"DBConexion\");\r\n\t\r\n\tprivate String user;\r\n\tprivate String password;\r\n\tprivate Connection connection;\r\n\t\r\n\tpublic DBConexion(String user, String password) {\r\n\t\tsuper();\r\n\t\tthis.user = user;\r\n\t\tthis.password = password;\r\n\t}\r\n\t\r\n\t// Metodo que estable la conexion con la base de datos\r\n\tpublic Connection getConexion() throws ClassNotFoundException {\r\n\t\t\r\n\t\tString urlConnection = \"jdbc:mysql://localhost:3306/empresa-crud-empleados-mostoles-backend\";\r\n\t\t\r\n\t\tProperties info = new Properties();\r\n\t\t\r\n\t\tinfo.put(\"user\", this.user);\r\n\t\tinfo.put(\"password\", this.password);\r\n\t\t\r\n\t\t\r\n\t\ttry {\r\n\t\t\tClass.forName(\"com.mysql.cj.jdbc.Driver\");\r\n\t\t\tthis.connection = DriverManager.getConnection(urlConnection, info);\r\n\t\t\tLOG.info(\"Conexion establecida con la base de datos, exitosamente !!!!\");\r\n\t\t} catch (SQLException e) {\r\n\t\t\t// TODO Auto-generated catch block\r\n\t\t\te.printStackTrace();\r\n\t\t}\r\n\t\t\r\n\t\treturn this.connection;\r\n\t}\r\n\r\n\t@Override\r\n\tpublic void close() throws Exception {\r\n\t\tthis.connection.close();\r\n\t}\r\n\t\r\n\t// Metodo que recupera todos los registros de la tabla empleados\r\n\tpublic ResultSet getEmpleados(Connection connection) {\r\n\t\t\r\n\t\tResultSet rs = null;\r\n\t\tString query = \"SELECT * FROM `empresa-crud-empleados-mostoles-backend`.empleados\";\r\n\t\tStatement stmt = null;\r\n\t\t\r\n\t\ttry {\r\n\t\t\tstmt = connection.createStatement();\r\n\t\t\trs = stmt.executeQuery(query);\r\n\t\t} catch (SQLException e) {\r\n\t\t\t// TODO Auto-generated catch block\r\n\t\t\te.printStackTrace();\r\n\t\t}\r\n\t\t\r\n\t\t\t\r\n\t\treturn rs;\r\n\t}\r\n\t\r\n\t// Metodo que recupera todos los registros de la tabla departamentos\r\n\tpublic ResultSet getDptos(Connection connection) {\r\n\t\t\r\n\t\tResultSet rs = null;\r\n\t\tString query = \"SELECT * FROM `empresa-crud-empleados-mostoles-backend`.departamentos\";\r\n\t\tStatement stmt = null;\r\n\t\t\r\n\t\ttry {\r\n\t\t\tstmt = connection.createStatement();\r\n\t\t\trs = stmt.executeQuery(query);\r\n\t\t} catch (SQLException e) {\r\n\t\t\tLOG.severe(\"Error recuperando departamentos y la causa mas probable es: \"\r\n\t\t\t\t\t\t\t\t+ e.getMessage());\r\n\t\t\te.printStackTrace();\r\n\t\t}\r\n\t\t\r\n\t\treturn rs;\r\n\t}\r\n\t\r\n\t// Metodo que inserta empleado y sus correos y telefonos en la base de datos, \r\n\t// en el marco de una transaccion\r\n\tpublic void altaEmpleado(Empleado empleado, \r\n\t\t\tList<String> dirCorreos, \r\n\t\t\tList<String> numerosTelefono,\r\n\t\t\tConnection connection) throws SQLException {\r\n\t\t\r\n\t\t// Inserta empleado y devuelve el last inserted id en la tabla de empleados\r\n\t\tString query1 = \"INSERT INTO `empleados` (`nombre`,\"\r\n\t\t\t\t+ \" `primerApellido`, `segundoApellido`,\"\r\n\t\t\t\t+ \" `fechaAlta`, `genero`, `salario`,\"\r\n\t\t\t\t+ \" `departamentos_id`) VALUES \"\r\n\t\t\t\t+ \"(?, ?, ?, ?, ?, ?, ?)\";\r\n\t\t\r\n\t\t/* ¿Que son las sentencias preparadas? (Prepared Statements) \r\n\t\t * \r\n\t\t * Son la primera linea de defensa contra los ataques de inyeccion de SQL\r\n\t\t * Separan la parte fija de la consulta de los parametros que recibe\r\n\t\t * la misma. \r\n\t\t * El rendimiento es muy similar al de los procedimientos almacenados\r\n\t\t * porque una vez que se ejecuta la consulta, el componente analizador \r\n\t\t * de consulta u optimizador de consulta no tiene que analizar \r\n\t\t * nuevamente el plan de ejecucion de la consulta, y la misma el compilada\r\n\t\t * y guardada en el servidor, de forma tal que la proxima solamente hay que\r\n\t\t * pasarle los parametros variables a la consulta para ejecutarla y la ejecu\r\n\t\t * cion sera lo mas rapido, eficiente, y seguro posible\r\n\t\t * \r\n\t\t * Nota: Los parametros que se le pasan la consulta preparada, comienzan en\r\n\t\t * el valor 1, no cero. */\r\n\t\t\r\n\t\t// Con el id del empleado, tenemos que insertar sus corros y \r\n\t\t// sus telefonos correspondientes\r\n\t\t// Inserta correos\r\n\t\tString query2 = \"INSERT INTO `correos` (`email`, `empleados_id`) \"\r\n\t\t\t\t+ \"VALUES (?, ?)\";\r\n\t\t\r\n\t\t\r\n\t\t// Inserta telefonos\r\n\t\tString query3 = \"INSERT INTO `telefonos` (`numero`, `empleados_id`) \"\r\n\t\t\t\t+ \"VALUES (?, ?)\";\r\n\t\t\r\n\t\t/* Tanto insertar el empleado como sus correos y telefonos tiene que \r\n\t\t * hacerse en el marco de una transaccion */\r\n\t\t\r\n\t\ttry {\r\n\t\t\t// Iniciamos la transaccion\r\n\t\t\tconnection.setAutoCommit(false);\r\n\t\t\t\r\n\t\t\tPreparedStatement stmt1 = connection.prepareStatement(query1,\r\n\t\t\t\t\t\t\tStatement.RETURN_GENERATED_KEYS);\r\n\t\t\tstmt1.setString(1, empleado.nombre());\r\n\t\t\tstmt1.setString(2, empleado.primerApellido());\r\n\t\t\t\r\n\t\t\t// Considerar que el segundo apellido no es requerido, no es necesario\r\n\t\t\t// porque ya lo hemos tenido en cuenta en el AltaController\r\n\t\t\tstmt1.setString(3, empleado.segundoApellido());\r\n\t\t\tstmt1.setDate(4, Date.valueOf(empleado.fechaAlta()));\r\n\t\t\tstmt1.setString(5, empleado.genero().name());\r\n\t\t\tstmt1.setDouble(6, empleado.salario().doubleValue());\r\n\t\t\t// stmt1.setBigDecimal(6, empleado.salario());\r\n\t\t\tstmt1.setInt(7, empleado.departamentos_id());\r\n\t\t\t\r\n\t\t\t// Lanzar la consulta preparada\r\n\t\t\t\r\n\t\t    int totalFilas = stmt1.executeUpdate();\r\n\t\t    \r\n\t\t    if (totalFilas != 0) {\r\n\t\t    \t\r\n\t\t    \t// Recuperamos el Id del empleado insertado, para ir \r\n\t\t    \t// a las tablas de telefonos y correos\r\n\t\t    \t\r\n\t\t    \tlong lastInsertedId = 0L;\r\n\t\t    \t\r\n\t\t    \tResultSet rs = stmt1.getGeneratedKeys();\r\n\t\t    \t\r\n\t\t    \tif (rs.next()) \r\n\t\t    \t\tlastInsertedId = rs.getLong(1);\r\n\t\t    \t\r\n\t\t    \t// Insertar correos si es que me los han proporcionado\r\n\t\t    \tif (dirCorreos != null && dirCorreos.size() > 0) {\r\n\t\t    \t\t\r\n\t\t    \t\tPreparedStatement stmt2 = connection.prepareStatement(query2);\r\n\t\t    \t\t\r\n\t\t    \t\tstmt2.setInt(2, Math.toIntExact(lastInsertedId));\r\n\t\t    \t\t\r\n\t\t    \t\t/* El codigo siguiente funciona pero no es nada eficiente,\r\n\t\t    \t\t * porque por cada correo va a realizar una conexion a la base\r\n\t\t    \t\t * de datos, lo cual consume recursos, por lo cual lo mejor es\r\n\t\t    \t\t * tener el lote completo de los correos y enviarlo todo \r\n\t\t    \t\t * de golpe */\r\n//\t\t    \t\tfor (String email : dirCorreos) {\r\n//\t\t    \t\t\tstmt2.setString(1, email);\r\n//\t\t    \t\t\t\r\n//\t\t    \t\t\tstmt2.executeUpdate();\r\n//\t\t    \t\t}\r\n\t\t    \t\t\r\n\t\t    \t\tfor (String email : dirCorreos) {\r\n\t\t    \t\t\tstmt2.setString(1, email);\r\n\t\t    \t\t\tstmt2.addBatch();\r\n\t\t    \t\t}\r\n\t\t    \t\t\r\n\t\t    \t\tstmt2.executeBatch();\r\n\t\t    \t}\r\n\t\t    \t\r\n\t\t    \t// Insertar telefonos si es que me los han proporcionado\r\n\t\t    \tif (numerosTelefono != null && numerosTelefono.size() > 0) {\r\n\t\t    \t\t\r\n\t\t    \t\tPreparedStatement stmt3 = connection.prepareStatement(query3);\r\n\t\t    \t\t\r\n\t\t    \t\tstmt3.setInt(2, Math.toIntExact(lastInsertedId));\r\n\t\t    \t\t\r\n\t\t    \t\t/* El codigo siguiente funciona pero no es nada eficiente,\r\n\t\t    \t\t * porque por cada correo va a realizar una conexion a la base\r\n\t\t    \t\t * de datos, lo cual consume recursos, por lo cual lo mejor es\r\n\t\t    \t\t * tener el lote completo de los correos y enviarlo todo \r\n\t\t    \t\t * de golpe */\r\n//\t\t    \t\tfor (String numero : numerosTelefono) {\r\n//\t\t    \t\t\tstmt3.setString(1, numero);\r\n//\t\t    \t\t\t\r\n//\t\t    \t\t\tstmt3.executeUpdate();\r\n//\t\t    \t\t}\r\n\t\t    \t\t\r\n\t\t    \t\tfor (String numero : numerosTelefono) {\r\n\t\t    \t\t\tstmt3.setString(1, numero);\r\n\t\t    \t\t\tstmt3.addBatch();\r\n\t\t    \t\t}\r\n\t\t    \t\t\r\n\t\t    \t\tstmt3.executeBatch();\r\n\t\t    \t}\r\n\t\t    \t\r\n\t\t    \t\r\n\t\t    }\r\n\t\t\t\r\n\t\t\t\r\n\t\t\t\r\n\t\t\t\r\n\t\t\t\r\n\t\t\t\r\n\t\t\tconnection.commit();\r\n\t\t} catch (Exception e) {\r\n\t\t\tLOG.severe(\"Error insertando el nuevo empleado y la causa mas probable es: \"\r\n\t\t\t\t\t\t\t\t+ e.getMessage());\r\n\t\t\te.printStackTrace();\r\n\t\t\tconnection.rollback();\r\n\t\t\tLOG.info(\"Transaccion revertida, no se ha insertado el nuevo empleado\");\r\n\t\t} finally {\r\n\t\t\t\tconnection.setAutoCommit(true);\r\n\t\t}\r\n\t}\r\n\t\r\n\t/* Metodo que recupera los detalles (Nombre del Dpto, los telefonos  \r\n\t * y los correos) de un empleado cuyo id se recibe como parametro */\r\n\tpublic ResultSet detallesEmpleado(int idEmpleado, Connection connection) {\r\n\t\t\r\n\t\tResultSet rs = null;\r\n\t\tString query = \"select dep.nombre nombreDpto, tel.numero numeroTelefono, \"\r\n\t\t\t\t+ \"cor.email email\\n\"\r\n\t\t\t\t+ \"from empleados emp left join departamentos dep on\\n\"\r\n\t\t\t\t+ \"\temp.departamentos_id = dep.id left join telefonos tel on\\n\"\r\n\t\t\t\t+ \"\t\temp.id = tel.empleados_id left join correos cor on \\n\"\r\n\t\t\t\t+ \"\t\t\temp.id = cor.empleados_id\\n\"\r\n\t\t\t\t+ \"where emp.id = ?\";\r\n\t\t\r\n\t\tPreparedStatement stmt1 = null;\r\n\t\t\r\n\t\ttry {\r\n\t\t\tstmt1 = connection.prepareStatement(query, \r\n\t\t\t\t\tResultSet.TYPE_SCROLL_INSENSITIVE, \r\n\t\t\t\t\tResultSet.CONCUR_UPDATABLE);\r\n\t\t\t\r\n\t\t\tstmt1.setInt(1, idEmpleado);\r\n\t\t\trs = stmt1.executeQuery();\r\n\t\t} catch (SQLException e) {\r\n\t\t\tLOG.severe(\"Error recuperando detalles del empleado\");\r\n\t\t\te.printStackTrace();\r\n\t\t}\r\n\t\t\r\n\t\treturn rs;\r\n\t}\r\n}\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/crud-empleados-mvc-facade-jdbc/src/main/java/com/example/dao/DBConexion.java b/crud-empleados-mvc-facade-jdbc/src/main/java/com/example/dao/DBConexion.java
+--- a/crud-empleados-mvc-facade-jdbc/src/main/java/com/example/dao/DBConexion.java	(revision 4faf4e6460cac02131975a20b7648cb66f0aa9b1)
++++ b/crud-empleados-mvc-facade-jdbc/src/main/java/com/example/dao/DBConexion.java	(date 1780993324929)
+@@ -73,6 +73,21 @@
+ 			
+ 		return rs;
+ 	}
++	public ResultSet getEstudiantes(Connection connection) {
++
++		ResultSet rs = null;
++		String query = "SELECT * FROM Universidad.estudiantes";
++		Statement stmt = null;
++
++		try {
++			stmt = connection.createStatement();
++			rs = stmt.executeQuery(query);
++		} catch (SQLException e) {
++			e.printStackTrace();
++		}
++
++		return rs;
++	}
+ 	
+ 	// Metodo que recupera todos los registros de la tabla departamentos
+ 	public ResultSet getDptos(Connection connection) {
+Index: crud-empleados-mvc-facade-jdbc/src/main/java/com/example/models/Empleado.java
+===================================================================
+diff --git a/crud-empleados-mvc-facade-jdbc/src/main/java/com/example/models/Empleado.java b/crud-empleados-mvc-facade-jdbc/src/main/java/com/example/models/Empleado.java
+deleted file mode 100644
+--- a/crud-empleados-mvc-facade-jdbc/src/main/java/com/example/models/Empleado.java	(revision 4faf4e6460cac02131975a20b7648cb66f0aa9b1)
++++ /dev/null	(revision 4faf4e6460cac02131975a20b7648cb66f0aa9b1)
+@@ -1,19 +0,0 @@
+-package com.example.models;
+-
+-import java.math.BigDecimal;
+-import java.time.LocalDate;
+-
+-import lombok.Builder;
+-
+-@Builder
+-public record Empleado(
+-		int id, 
+-		String nombre, 
+-		String primerApellido,
+-		String segundoApellido,
+-		LocalDate fechaAlta,
+-		Genero genero,
+-		BigDecimal salario,
+-		int departamentos_id) {
+-
+-}
+Index: crud-empleados-mvc-facade-jdbc/src/main/java/com/example/models/Estudiante.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/crud-empleados-mvc-facade-jdbc/src/main/java/com/example/models/Estudiante.java b/crud-empleados-mvc-facade-jdbc/src/main/java/com/example/models/Estudiante.java
+new file mode 100644
+--- /dev/null	(date 1780993286041)
++++ b/crud-empleados-mvc-facade-jdbc/src/main/java/com/example/models/Estudiante.java	(date 1780993286041)
+@@ -0,0 +1,20 @@
++package com.example.models;
++
++import java.math.BigDecimal;
++import java.time.LocalDate;
++
++import lombok.Builder;
++
++@Builder
++public record Estudiante(
++		int id,
++		String nombre,
++		String apellidos,
++		String email,
++		String telefono,
++		LocalDate fechaNacimiento,
++		int id_carrera,
++		boolean activo,
++		LocalDate fechaRegistro,
++		LocalDate fechaActualizacion) {
++}
+\ No newline at end of file
