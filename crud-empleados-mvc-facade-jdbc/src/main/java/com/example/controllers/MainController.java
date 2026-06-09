@@ -6,54 +6,36 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.sql.SQLException;
 import java.util.List;
 import java.util.logging.Logger;
 
-import com.example.models.Empleado;
-import com.example.services.EmpleadoService;
-import com.example.services.EmpleadoServiceImpl;
+import com.example.models.Estudiante;
+import com.example.services.EstudianteService;
+import com.example.services.EstudianteServiceImpl;
 
-/**
- * Servlet implementation class MainController
- */
 @WebServlet("/MainController")
 public class MainController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	
+
 	private static final Logger LOG = Logger.getLogger("MainController");
-       
-    /**
-     * @see HttpServlet#HttpServlet()
-     */
-    public MainController() {
-        super();
-        // TODO Auto-generated constructor stub
-    }
 
-	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
-	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
-		// Conectar con la capa de servicios
-		
-		EmpleadoService empleadoService = new EmpleadoServiceImpl();
-		
-		List<Empleado> empleados = empleadoService.getEmpleados();
-		
-		// El listado de empleados hay que enviarlo como atributo a la vista 
-		// para que sea renderizada
-		request.setAttribute("empleados", empleados);
-		
-		request.getRequestDispatcher("views/listadoEmpleados.jsp").forward(request, response);
-		
+	public MainController() {
+		super();
 	}
 
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
-	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+
+		EstudianteService estudianteService = new EstudianteServiceImpl();
+
+		List<Estudiante> estudiantes = estudianteService.getEstudiantes();
+
+		request.setAttribute("estudiantes", estudiantes);
+
+		request.getRequestDispatcher("views/listadoEstudiantes.jsp").forward(request, response);
 	}
 
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+	}
 }

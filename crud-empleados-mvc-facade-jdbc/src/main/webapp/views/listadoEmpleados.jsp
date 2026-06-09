@@ -1,4 +1,4 @@
-<%@page import="com.example.models.Empleado"%>
+<%@page import="com.example.models.Estudiante"%>
 <%@page import="java.util.List"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
@@ -6,43 +6,47 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>empleados</title>
+<title>Estudiantes</title>
 </head>
 <body>
-	<%
-	
-		List<Empleado> empleados = (List<Empleado>) request.getAttribute("empleados");
-	
-	%>
-	<h1>Listado de Empleados</h1>
-	
-	<table>
-		<thead>
-			<tr>
-				<th>Nombre</th>
-				<th>Primer Apellido</th>
-				<th>Segundo Apellido</th>
-				<th>Fecha de Alta</th>
-				<th>Genero</th>
-				<th>Salario</th>
-			</tr>
-		</thead>
-		<tbody>
-			<%
-				for (Empleado empleado : empleados) {
-					%>
-					<tr>
-						<td><%=empleado.nombre() %></td>
-						<td><%=empleado.primerApellido() %></td>
-						<td><%=empleado.segundoApellido() %></td>
-						<td><%=empleado.fechaAlta() %></td>
-						<td><%=empleado.genero() %></td>
-						<td><%=empleado.salario() %></td>
-					</tr>
-					<%
-				}
-			%>	
-		</tbody>
-	</table>
+    <%
+        List<Estudiante> estudiantes = (List<Estudiante>) request.getAttribute("estudiantes");
+    %>
+    <h1>Listado de Estudiantes</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Apellidos</th>
+                <th>Email</th>
+                <th>Teléfono</th>
+                <th>Fecha de Nacimiento</th>
+                <th>ID Carrera</th>
+                <th>Activo</th>
+                <th>Fecha de Registro</th>
+                <th>Fecha de Actualización</th>
+            </tr>
+        </thead>
+        <tbody>
+            <%
+                for (Estudiante estudiante : estudiantes) {
+            %>
+                <tr>
+                    <td><%= estudiante.nombre() %></td>
+                    <td><%= estudiante.apellidos() %></td>
+                    <td><%= estudiante.email() %></td>
+                    <td><%= estudiante.telefono() %></td>
+                    <td><%= estudiante.fechaNacimiento() %></td>
+                    <td><%= estudiante.id_carrera() %></td>
+                    <td><%= estudiante.activo() %></td>
+                    <td><%= estudiante.fechaRegistro() %></td>
+                    <td><%= estudiante.fechaActualizacion() %></td>
+                </tr>
+            <%
+                }
+            %>
+        </tbody>
+    </table>
 </body>
 </html>
