@@ -1,10 +1,7 @@
-<%@page import="java.util.stream.Collectors"%>
-<%@page import="com.example.models.Genero"%>
-<%@page import="com.example.models.EmpleadoUpdate"%>
-<%@page import="com.example.models.Departamento"%>
+<%@page import="com.example.models.Carrera"%>
+<%@page import="com.example.models.EstudianteUpdate"%>
 <%@page import="java.util.List"%>
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -12,111 +9,38 @@
 <title>Formulario</title>
 </head>
 <body>
-	<%
-		EmpleadoUpdate empleadoUpdate = (EmpleadoUpdate) request.getAttribute("empleadoUpdate");
-	%>
-	<h1>Formulario de Alta/Modificacion de Empleado</h1>
+    <%
+        EstudianteUpdate estudianteUpdate = (EstudianteUpdate) request.getAttribute("estudianteUpdate");
+    %>
+    <h1>Formulario de Alta/Modificacion de Estudiante</h1>
 
-	<fieldset>
-		<legend>Formulario de Gestion de Empleado</legend>
-		<form action="AltaController" method="post">
-			<!-- El valor del campo oculto sera cero si es alta nueva y de lo contrario
-			tendrá el id del empleado a actualizar  -->
-			<input type="hidden" name="idEmpleado" value="<%=empleadoUpdate == null ? 0 : empleadoUpdate.id() %>">
-			<div>
-				<label for="nombre">Nombre: </label> 
-				<input type="text" id="nombre" name="nombre"
-				  required placeholder="su nombre aqui, por favor!!"
-				  value="<%=empleadoUpdate != null ? empleadoUpdate.nombreEmpleado() : ' ' %>">
-			</div>
-			<div>
-                <label for="primerApellido">Primer Apellido: </label> 
-                <input type="text" id="primerApellido" required name="primerApellido" 
-                			placeholder="su primer apellido aqui, por favor!!"
-                	value="<%=empleadoUpdate != null ? empleadoUpdate.primerApellido() : ' ' %>">
+    <fieldset>
+        <legend>Formulario de Gestión de Estudiante</legend>
+        <form action="AltaController" method="post">
+
+            <input type="hidden" name="idEstudiante"
+                value="<%= estudianteUpdate == null ? 0 : estudianteUpdate.id() %>">
+
+            <!-- fechaRegistro oculta para conservarla en modificacion -->
+            <input type="hidden" name="fechaRegistro"
+                value="<%= estudianteUpdate != null ? estudianteUpdate.fechaRegistro() : '' %>">
+
+            <div>
+                <label for="nombre">Nombre: </label>
+                <input type="text" id="nombre" name="nombre" required
+                    placeholder="Su nombre aquí"
+                    value="<%= estudianteUpdate != null ? estudianteUpdate.nombre() : ' ' %>">
             </div>
             <div>
-                <label for="segundoApellido">Segundo Apellido: </label> 
-                <input type="text" id="segundoApellido" name="segundoApellido" 
-                			placeholder="su segundo apellido aqui, por favor!!"
-                	value="<%=empleadoUpdate != null ? empleadoUpdate.segundoApellido() : ' ' %>">
-             </div>
-             <div>
-             	<label for="fechaAlta">Fecha de Alta: </label>
-             	<input type="date" name="fechaAlta" id="fechaAlta" required
-             	 value="<%=empleadoUpdate != null ? empleadoUpdate.fechaAlta() : ' ' %>">
-             
-             </div>
-             <div>
-             	<fieldset>
-             		<legend>Genero</legend>
-             		<label for="hombre">Hombre: </label>
-             		<input type="radio" id="hombre" required name="genero"
-             			 value="HOMBRE" <%=empleadoUpdate != null && 
-             			        empleadoUpdate.genero().equals(Genero.HOMBRE) ? "checked" : " "%>>
-             		<label for="mujer">Mujer: </label>
-             		<input type="radio" id="mujer" required name="genero" value="MUJER"
-             			<%=empleadoUpdate != null && 
-             			        empleadoUpdate.genero().equals(Genero.MUJER) ? "checked" : " "%>>
-             		<label for="otro">Otro: </label>
-             		<input type="radio" id="otro" required name="genero" value="OTRO"
-             		  <%=empleadoUpdate != null && 
-             			        empleadoUpdate.genero().equals(Genero.OTRO) ? "checked" : " "%>>
-             	</fieldset>
-			 </div>
-			 <div>
-			 	<label for="salario">Salario: </label>
-			 	<input type="text" id="salario" name="salario" required
-			 	   value="<%=empleadoUpdate != null ? empleadoUpdate.salario() : ' ' %>">
-			 </div>
-			 <div>
-			 	<%
-			 		List<Departamento> departamentos = (List<Departamento>) request.getAttribute("departamentos");
-			 	%>
-			 	<label for="departamento">Departamento: </label>
-			 	<select id="departamento" name="departamento" required>
-			 		<option></option>
-			 		<%
-			 			for (Departamento departamento : departamentos) {
-			 				%>
-			 				<option value="<%=departamento.id() %>" 
-			 				    <%=empleadoUpdate != null && 
-			 						empleadoUpdate.idDpto() == departamento.id() ? 
-			 								"selected" : 
-			 									" " %>
-			 				><%=departamento.nombre() %></option>
-			 				<%
-			 			}
-			 		%>
-			 	</select>
-			 </div>
-			 
-			 <div>
-			 	<label for="correos">Correos: </label>
-			 	<input type="text" id="correos" name="correos"
-			 		placeholder="Uno o varios separados por ;"
-			 		value="<%=empleadoUpdate != null && 
-			 					!empleadoUpdate.emails().contains(null) ? 
-			 						empleadoUpdate.emails().stream()
-			 							.collect(Collectors.joining(";")) : ' ' %>"
-			 		>
-			 </div>
-			 
-			 <div>
-			 	<label for="telefonos">Numeros de Telefono: </label>
-			 	<input type="text" id="telefonos" name="telefonos" 
-			 		placeholder="Uno o varios separados por ;"
-			 		value="<%=empleadoUpdate != null && 
-			 					!empleadoUpdate.numerosTelefono().contains(null) ? 
-			 						empleadoUpdate.numerosTelefono().stream()
-			 							.collect(Collectors.joining(";")) : ' ' %>">
-			 </div>
-			 
-             <br>
-             <br>
-        
-			<input type="submit" value="Enviar">
-		</form>
-	</fieldset>
-</body>
-</html>
+                <label for="apellidos">Apellidos: </label>
+                <input type="text" id="apellidos" name="apellidos" required
+                    placeholder="Sus apellidos aquí"
+                    value="<%= estudianteUpdate != null ? estudianteUpdate.apellidos() : ' ' %>">
+            </div>
+            <div>
+                <label for="email">Email: </label>
+                <input type="email" id="email" name="email" required
+                    placeholder="Su email aquí"
+                    value="<%= estudianteUpdate != null ? estudianteUpdate.email() : ' ' %>">
+            </div>
+            <div>

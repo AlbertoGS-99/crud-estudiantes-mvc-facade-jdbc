@@ -10,78 +10,47 @@ import java.util.List;
 import java.util.logging.Logger;
 
 import com.example.models.Detalle;
-import com.example.models.Empleado;
-import com.example.services.EmpleadoService;
-import com.example.services.EmpleadoServiceImpl;
+import com.example.models.Estudiante;
+import com.example.services.EstudianteService;
+import com.example.services.EstudianteServiceImpl;
 
-/**
- * Servlet implementation class DetallesController
- */
 @WebServlet("/DetallesController")
 public class DetallesController extends HttpServlet {
-	
+
 	private static final long serialVersionUID = 1L;
-	
 	private static final Logger LOG = Logger.getLogger("DetallesController");
-       
-    /**
-     * @see HttpServlet#HttpServlet()
-     */
-    public DetallesController() {
-        super();
-        // TODO Auto-generated constructor stub
-    }
 
-	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
-	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
-		// Recibir el idEmpleado, que es el parametro que me envian con la peticion 
-		// (request)
-		
-		int idEmpleado = Integer.parseInt(request.getParameter("idEmpleado"));
-		
-		// Podriamos comprobar si se esta recibiendo correctamente el idEmpleado
-		// mostrandolo en la consola
-		
-		// System.out.println("Id Empleado recibido: " + idEmpleado);
-		
-		LOG.info("Id Empleado recibido: " + idEmpleado);
-		
-		// Conectar con la capa de servicio para recuperar los detalles del 
-		// empleado
-		
-		EmpleadoService empleadoService = new EmpleadoServiceImpl();
-		
-		/* Recuperamos todos los empleados y lo filtramos para obtener el 
-		 * empleado cuyo id se ha recibido */
-		
-		List<Empleado> empleados = empleadoService.getEmpleados();
-		
-		Empleado empleado = empleados.stream()
-				.filter(e -> e.id() == idEmpleado)
+	public DetallesController() {
+		super();
+	}
+
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+
+		int idEstudiante = Integer.parseInt(request.getParameter("idEstudiante"));
+
+		LOG.info("Id Estudiante recibido: " + idEstudiante);
+
+		EstudianteService estudianteService = new EstudianteServiceImpl();
+
+		List<Estudiante> estudiantes = estudianteService.getEstudiantes();
+
+		Estudiante estudiante = estudiantes.stream()
+				.filter(e -> e.id() == idEstudiante)
 				.findFirst()
-				.orElseThrow(() -> 
-				         new RuntimeException("Empleado no encontrado"));
-		
-		request.setAttribute("empleado", empleado);
-		
-		Detalle detalles = empleadoService.detalles(idEmpleado);
-		
-		// Mostrar la vista detallesEmpleado.jsp	
-		
+				.orElseThrow(() ->
+						new RuntimeException("Estudiante no encontrado"));
+
+		request.setAttribute("estudiante", estudiante);
+
+		Detalle detalles = estudianteService.detalles(idEstudiante);
 		request.setAttribute("detalles", detalles);
-		
-		request.getRequestDispatcher("views/detallesEmpleado.jsp")
+
+		request.getRequestDispatcher("views/detallesEstudiante.jsp")
 				.forward(request, response);
-		
 	}
 
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
-	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 	}
-
 }
