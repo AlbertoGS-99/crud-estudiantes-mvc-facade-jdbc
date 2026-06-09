@@ -5,6 +5,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+
 import java.io.IOException;
 import java.sql.SQLException;
 import java.time.LocalDate;
@@ -21,64 +22,92 @@ import com.example.services.EstudianteServiceImpl;
 @WebServlet("/AltaController")
 public class AltaController extends HttpServlet {
 
-	private static final Logger LOG = Logger.getLogger("AltaController");
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
+    private static final Logger LOG = Logger.getLogger("AltaController");
 
-	public AltaController() {
-		super();
-	}
+    public AltaController() {
+        super();
+    }
 
-	protected void doGet(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
 
-		CarreraService carreraService = new CarreraServiceImpl();
-		List<Carrera> carreras = null;
+        CarreraService carreraService = new CarreraServiceImpl();
 
-		try {
-			carreras = carreraService.getCarreras();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+        try {
+            List<Carrera> carreras = carreraService.getCarreras();
 
-		request.setAttribute("carreras", carreras);
-		request.getRequestDispatcher("views/formularioAltaModificacion.jsp")
-				.forward(request, response);
-	}
+            request.setAttribute("carreras", carreras);
 
-	protected void doPost(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
+            request.getRequestDispatcher("views/formularioAltaModificacion.jsp")
+                    .forward(request, response);
 
-		int idEstudiante = Integer.parseInt(request.getParameter("idEstudiante"));
+        } catch (Exception e) {
+            LOG.severe("Error recuperando carreras: " + e.getMessage());
+            throw new ServletException(e);
+        }
+    }
 
-		String nombre             = request.getParameter("nombre");
-		String apellidos          = request.getParameter("apellidos");
-		String email              = request.getParameter("email");
-		String telefono           = request.getParameter("telefono") == null ?
-				"" : request.getParameter("telefono");
-		LocalDate fechaNacimiento = LocalDate.parse(request.getParameter("fechaNacimiento"));
-		int id_carrera            = Integer.parseInt(request.getParameter("carrera"));
-		boolean activo            = Boolean.parseBoolean(request.getParameter("activo"));
-		LocalDate fechaRegistro   = idEstudiante == 0 ? LocalDate.now() :
-				LocalDate.parse(request.getParameter("fechaRegistro"));
-		LocalDate fechaActualizacion = LocalDate.now();
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
 
-		Estudiante estudiante = Estudiante.builder()
-				.id(idEstudiante)
-				.nombre(nombre)
-				.apellidos(apellidos)
-				.email(email)
-				.telefono(telefono)
-				.fechaNacimiento(fechaNacimiento)
-				.id_carrera(id_carrera)
-				.activo(activo)
-				.fechaRegistro(fechaRegistro)
-				.fechaActualizacion(fechaActualizacion)
-				.build();
+        int idEstudiante = Integer.parseInt(request.getParameter("idEstudiante"));
 
-		EstudianteService estudianteService = new EstudianteServiceImpl();
+        String nombre = request.getParameter("nombre");
+        String apellidos = request.getParameter("apellidos");
+        String email = request.getParameter("email");
+        String telefono = request.getParameter("telefono") == null
+                ? ""
+                : request.getParameter("telefono");
 
-		if (idEstudiante == 0) {
-			// Alta nueva
-			try {
-				estudianteService.altaEstudiante(estudiante);
-			} catch (SQLException e) {
+        LocalDate fechaNacimiento =
+                LocalDate.parse(request.getParameter("fechaNacimiento"));
+
+        int id_carrera =
+                Integer.parseInt(request.getParameter("carrera"));
+
+        boolean activo =
+                Boolean.parseBoolean(request.getParameter("activo"));
+
+        LocalDate fechaRegistro = (idEstudiante == 0)
+                ? LocalDate.now()
+                : LocalDate.parse(request.getParameter("fechaRegistro"));
+
+        LocalDate fechaActualizacion = LocalDate.now();
+
+        Estudiante estudiante = Estudiante.builder()
+                .id(idEstudiante)
+                .nombre(nombre)
+                .apellidos(apellidos)
+                .email(email)
+                .telefono(telefono)
+                .fechaNacimiento(fechaNacimiento)
+                .id_carrera(id_carrera)
+                .activo(activo)
+                .fechaRegistro(fechaRegistro)
+                .fechaActualizacion(fechaActualizacion)
+                .build();
+
+        EstudianteService estudianteService = new EstudianteServiceImpl();
+
+        if (idEstudiante == 0) {
+            try {
+                estudianteService.altaEstudiante(estudiante);
+            } catch (SQLException e) {
+                throw new ServletException("Error al dar de alta el estudiante", e);
+            }
+        } else {
+            estudianteService.updateEstudiante(estudiante);
+        }
+
+        List<Estudiante> estudiantes =
+                estudianteService.getEstudiantes();
+
+        request.setAttribute("estudiantes", estudiantes);
+
+        request.getRequestDispatcher("views/listadoEstudiantes.jsp")
+                .forward(request, response);
+    }
+}
